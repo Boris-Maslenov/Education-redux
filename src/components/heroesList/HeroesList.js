@@ -2,6 +2,7 @@ import {useHttp} from '../../hooks/http.hook';
 import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CSSTransition, TransitionGroup} from 'react-transition-group';
+import {createSelector} from 'reselect';
 
 import { heroesFetching, heroesFetched, heroesFetchingError, heroDeleted } from '../../actions';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
@@ -15,7 +16,36 @@ import './heroesList.scss';
 // Удаление идет и с json файла при помощи метода DELETE
 
 const HeroesList = () => {
-    const {filteredHeroes, heroesLoadingStatus} = useSelector(state => state);
+
+    // const someState = useSelector(state => ({
+    //     activeFilter: state.filters.activeFilter,
+    //     heroes: state.heroes.heroes,
+    // }));
+    // p.s Не оптимизированный вариант: каждом изменении объекта будет перерисовываться, потому что в хуже идет строгое сравнение объектов, которые никогад не равны друг-другу
+
+    // const filteredHeroes = useSelector(state => {
+    //         if (state.filters.activeFilter === 'all') return state.heroes.heroes;
+    //     return state.heroes.heroes.filter( item => item.element === state.filters.activeFilter );
+    // });
+    // p.s - тоже не идеальный вариант, есть просадка по оптимизации. Даже при изменении state без фактического изменения будет перерендер
+    // нужно мемоизировать с помощью библиотеки resselect
+
+
+/**
+ * reselect - правильный вариант
+ */
+
+    const filteredHeroesSelector = createSelector(
+        state => state.filters.activeFilter,
+        state => state.heroes.heroes,
+        (filter, heroes) => {
+            if (filter === 'all') return heroes;
+            return heroes.filter( item => item.element === filter ); 
+        }
+    );
+
+    const filteredHeroes = useSelector( filteredHeroesSelector);
+    const heroesLoadingStatus = useSelector(state => state.heroesLoadingStatus);
     const dispatch = useDispatch();
     const {request} = useHttp();
 
