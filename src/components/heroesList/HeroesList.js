@@ -2,7 +2,7 @@ import {useHttp} from '../../hooks/http.hook';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { heroesFetching, heroesFetched, heroesFetchingError } from '../../actions';
+import { heroesFetching, heroesFetched, heroesFetchingError, heroesDeleted } from '../../actions';
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from '../spinner/Spinner';
 
@@ -11,8 +11,10 @@ import Spinner from '../spinner/Spinner';
 // Усложненная задача:
 // Удаление идет и с json файла при помощи метода DELETE
 
+
+
 const HeroesList = () => {
-    const {heroes, heroesLoadingStatus} = useSelector(state => state);
+    const {heroes, filters, heroesLoadingStatus} = useSelector(state => state);
     const dispatch = useDispatch();
     const {request} = useHttp();
 
@@ -22,8 +24,16 @@ const HeroesList = () => {
             .then(data => dispatch(heroesFetched(data)))
             .catch(() => dispatch(heroesFetchingError()))
 
+            
         // eslint-disable-next-line
     }, []);
+
+
+    const heroesDelete = (id) => {
+        request(`http://localhost:3001/heroes/${id}`, 'DELETE')
+            .then(() => dispatch(heroesDeleted(id)))
+            // eslint-disable-next-line
+    }
 
     if (heroesLoadingStatus === "loading") {
         return <Spinner/>;
@@ -35,13 +45,16 @@ const HeroesList = () => {
         if (arr.length === 0) {
             return <h5 className="text-center mt-5">Героев пока нет</h5>
         }
-
-        return arr.map(({id, ...props}) => {
-            return <HeroesListItem key={id} {...props}/>
-        })
+        if(filters === 'all') {
+            return arr.map( ({...props}) =>  <HeroesListItem deleted={heroesDelete} {...props}/> );
+        } else {
+            const newArr =  arr.filter( ({element}) => element === filters );
+            return newArr.map( ({...props}) =>  <HeroesListItem deleted={heroesDelete} {...props}/> );
+        }
     }
 
     const elements = renderHeroesList(heroes);
+
     return (
         <ul>
             {elements}
