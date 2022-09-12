@@ -31,9 +31,9 @@ const HeroesList = () => {
     // нужно мемоизировать с помощью библиотеки resselect
 
 
-/**
- * reselect - правильный вариант
- */
+    /**
+     * reselect - правильный вариант
+     */
 
     const filteredHeroesSelector = createSelector(
         state => state.filters.activeFilter,
@@ -50,7 +50,7 @@ const HeroesList = () => {
     const {request} = useHttp();
 
     useEffect(() => {
-        dispatch(heroesFetching());
+        dispatch('HEROES_FETCHING');
         request("http://localhost:3001/heroes")
             .then(data => dispatch(heroesFetched(data)))
             .catch(() => dispatch(heroesFetchingError()))
