@@ -1,6 +1,18 @@
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, compose, applyMiddleware} from 'redux';
 import {heroes, filters} from '../reducers';
-import { compose } from 'redux';
+                             // *       // **
+const stringMiddleware  = (store) => (dispatch) => (action) => { 
+    if(typeof action === 'string') {
+        return dispatch({
+            type: action
+        })
+    }
+    return dispatch(action);
+}
+
+// * store первым аргументом не весь а только {dispatch, getState}
+
+// ** - часто называют next, потому что идет последовательный вызов всех функций middleware
 
 const enhancer = (createStore) => (...args) => {
     const store = createStore(...args);
@@ -19,7 +31,8 @@ const enhancer = (createStore) => (...args) => {
 const rootReducer = combineReducers({heroes, filters});
 const store = createStore(
                     rootReducer, 
-                    compose(enhancer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+                    applyMiddleware(stringMiddleware)
+                    //compose(enhancer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
                     );
 
 export default store;
