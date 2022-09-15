@@ -1,6 +1,6 @@
 import {createSlice, createAsyncThunk, createEntityAdapter} from '@reduxjs/toolkit';
 import {useHttp} from '../../hooks/http.hook';
-
+import {createSelector} from '@reduxjs/toolkit';
 const heroesAdapter = createEntityAdapter(); // Вернется объект с готовыми методами , коллбэками и мемоизированные селекторы тд
                                                       //* Добавляем кастомное свойство
 const initialState = heroesAdapter.getInitialState( {heroesLoadingStatus: 'idle'} ); // return {entities:{}, ids:[]}
@@ -41,7 +41,18 @@ const heroesSlice = createSlice({
 
 const {actions, reducer} = heroesSlice;
 export default reducer;
-export const {selectAll} = heroesAdapter.getSelectors(state => state.heroes)
+
+const {selectAll} = heroesAdapter.getSelectors(state => state.heroes);
+
+export const filteredHeroesSelector = createSelector(
+    state => state.filters.activeFilter,
+    selectAll, //адаптер
+    (filter, heroes) => {
+        if (filter === 'all') return heroes;
+        return heroes.filter( item => item.element === filter ); 
+    }
+);
+
 export const {
     heroesFetching,
     heroesFetched,
