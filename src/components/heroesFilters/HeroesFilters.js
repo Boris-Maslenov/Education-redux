@@ -1,26 +1,16 @@
-import {useHttp} from '../../hooks/http.hook';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
-
 import { activeFilterChanged } from './filtersSlice';
 import {fetchFilters} from './filtersSlice';
 import Spinner from '../spinner/Spinner';
 
 const HeroesFilters = () => {
-
     const {filters, filtersLoadingStatus, activeFilter} = useSelector(state => state.filters);
     const dispatch = useDispatch();
-    const {request} = useHttp();
 
-    // Запрос на сервер для получения фильтров и последовательной смены состояния
     useEffect(() => {
         dispatch(fetchFilters());
-        // dispatch(filtersFetching());
-        // request("http://localhost:3001/filters")
-        //     .then(data => dispatch(filtersFetched(data)))
-        //     .catch(() => dispatch(filtersFetchingError()))
-
         // eslint-disable-next-line
     }, []);
 
