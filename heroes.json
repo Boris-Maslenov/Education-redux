@@ -1,5 +1,12 @@
 {
-  "heroes": [],
+  "heroes": [
+    {
+      "id": "dc635f31-e37f-4153-b92a-45717501c7fc",
+      "name": "rter",
+      "description": "tert",
+      "element": "water"
+    }
+  ],
   "filters": [
     {
       "name": "all",
