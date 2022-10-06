@@ -1,9 +1,15 @@
 {
   "heroes": [
     {
-      "id": "98494612-79ff-413f-959a-229551910767",
+      "id": "7a89f54a-472a-4d42-96e3-77bfa5101a54",
       "name": "Борис",
-      "description": "Ничего",
+      "description": "ничего не умею",
+      "element": "fire"
+    },
+    {
+      "id": "e15c6d51-6038-4c87-963d-8efeb32bc86d",
+      "name": "Арина",
+      "description": "писать код на php",
       "element": "water"
     }
   ],
