@@ -1,16 +1,10 @@
 {
   "heroes": [
     {
-      "id": "dc635f31-e37f-4153-b92a-45717501c7fc",
-      "name": "rter",
-      "description": "tert",
+      "id": "98494612-79ff-413f-959a-229551910767",
+      "name": "Борис",
+      "description": "Ничего",
       "element": "water"
-    },
-    {
-      "id": "61240291-b3f6-4046-b2c1-28a056804a92",
-      "name": "dfv",
-      "description": "dffvd",
-      "element": "fire"
     }
   ],
   "filters": [
